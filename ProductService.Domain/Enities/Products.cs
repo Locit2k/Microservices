@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ProductService.Domain.Enities
+{
+    public class Products : BaseEntity
+    {
+        public Guid ProductID { get; set; } = Guid.NewGuid();
+        public string ProductName { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public decimal Price { get; set; } = 0;
+        public int Stock { get; set; } = 0;
+        public string ImageUrl { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = false;
+    }
+}
