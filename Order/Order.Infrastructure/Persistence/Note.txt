@@ -1,0 +1,9 @@
+﻿Lệnh tạo Migration:
+
+PCM: 
+	+ Add-Migration InitDatabase -Project Order.Infrastructure -StartupProject Order.API -OutputDir Persistence/Migrations
+	+ Update-Database -Project Order.Infrastructure -StartupProject Order.API
+
+Terminal: 
+	+ dotnet ef migrations add InitDatabase --project Order.Infrastructure --startup-project Order.API --output-dir Persistence/Migrations
+	+ dotnet ef database update --project Order.Infrastructure --startup-project Order.API
