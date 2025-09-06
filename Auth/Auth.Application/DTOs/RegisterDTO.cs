@@ -1,6 +1,6 @@
 ﻿namespace Auth.Application.DTOs
 {
-    public class UserDTO
+    public class RegisterDTO
     {
         public string Name { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;

@@ -1,5 +1,4 @@
-﻿using Auth.Application.Mappings;
-using Auth.Application.Validations;
+﻿using Auth.Application.Validations;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +16,6 @@ namespace Auth.Application.DI
         {
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<LoginDTOValidations>();
-            services.AddAutoMapper(typeof(UserMappingProfile));
             return services;
         }
     }

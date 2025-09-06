@@ -8,9 +8,9 @@ using Auth.Application.DTOs;
 
 namespace Auth.Application.Validations
 {
-    public class UserDTOValidations : AbstractValidator<UserDTO>
+    public class RegisterDTOValidations : AbstractValidator<RegisterDTO>
     {
-        public UserDTOValidations()
+        public RegisterDTOValidations()
         {
             RuleFor(x => x.Name).NotEmpty().WithMessage("Họ và tên không được bỏ trống.");
 

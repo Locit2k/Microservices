@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using User.Domain.Entities;
-using UserService.Domain.Entities;
 
 namespace User.Infrastructure.Persistence
 {
@@ -18,7 +17,7 @@ namespace User.Infrastructure.Persistence
         }
         public DbSet<Roles> Roles { get; set; }
         public DbSet<Users> Users { get; set; }
-        public DbSet<Customers> Customers { get; set; }
+        public DbSet<UserLogins> UserLogins { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,11 +30,11 @@ namespace User.Infrastructure.Persistence
             modelBuilder.Entity<Users>(entity =>
             {
                 entity.ToTable("Users");
-                entity.HasKey(e => e.UserID);
+                entity.HasKey(e => e.RecID);
             });
-            modelBuilder.Entity<Customers>(entity =>
+            modelBuilder.Entity<UserLogins>(entity =>
             {
-                entity.ToTable("Customers");
+                entity.ToTable("UserLogins");
                 entity.HasKey(e => e.RecID);
             });
         }

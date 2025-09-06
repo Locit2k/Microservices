@@ -5,9 +5,13 @@ using Core.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -16,19 +20,18 @@ namespace Auth.Infrastructure.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<AuthService> _logger;
-        public AuthService(IUnitOfWork unitOfWork, ILogger<AuthService> logger)
+        private readonly JwtOptions _jwtOptions;
+        public AuthService(ILogger<AuthService> logger, IOptions<JwtOptions> jwtOptions)
         {
-            _unitOfWork = unitOfWork;
             _logger = logger;
+            _jwtOptions = jwtOptions.Value;
         }
 
         public async Task<DataResponse<object>> Login(LoginDTO data)
         {
             try
             {
-
                 return new DataResponse<object>(StatusCodes.Status200OK, "Đăng nhập thành công!", data = null);
             }
             catch (Exception ex)
@@ -52,19 +55,37 @@ namespace Auth.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<DataResponse<bool>> Register(UserDTO data)
+        public Task<DataResponse<bool>> Register(RegisterDTO data)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> GenerateToken(string userId, string role)
+        public string GenerateToken(string userID, string roleID)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, userID),
+                    new Claim(ClaimTypes.Role, roleID)
+                };
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        public Task<bool> ValidateToken(string token)
-        {
-            throw new NotImplementedException();
+                var token = new JwtSecurityToken(
+                    issuer: _jwtOptions.Issuer,
+                    audience: _jwtOptions.Audience,
+                    claims: claims,
+                    expires: DateTime.UtcNow.AddMinutes(_jwtOptions.TokenExpiration),
+                    signingCredentials: creds
+                );
+                return new JwtSecurityTokenHandler().WriteToken(token);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"GenerateToken error: {JsonSerializer.Serialize(ex)}.");
+                return string.Empty;
+            }
         }
 
         public string HashPassword(object user, string password)

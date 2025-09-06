@@ -39,7 +39,7 @@ namespace Auth.API.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<DataResponse<bool>> Register([FromBody] UserDTO data)
+        public async Task<DataResponse<bool>> Register([FromBody] RegisterDTO data)
         {
             return await _authService.Register(data);
         }

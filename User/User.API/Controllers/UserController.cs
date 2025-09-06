@@ -1,5 +1,6 @@
 ﻿using Core.Cache;
 using Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -11,6 +12,7 @@ namespace User.API.Controllers
 {
     [Route("api/users/[action]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -22,6 +24,7 @@ namespace User.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Check()
         {
             return Ok("User service checked");
@@ -55,9 +58,14 @@ namespace User.API.Controllers
         [HttpGet("{key}")]
         public async Task<IActionResult> GetCache(string key)
         {
-
             var value = await _cache.GetAsync<UserDTO>(key);
             return Ok(value);
+        }
+
+        [HttpGet]
+        public IActionResult CheckAuth()
+        {
+            return Ok("Auth service checked");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿
 using Auth.Application.DI;
 using Auth.Infrastructure.DI;
+using Core.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
@@ -22,6 +23,7 @@ namespace Auth.API
             builder.Services.AddSwaggerGen();
             builder.Services.AddApplicationServices();
             builder.Services.AddInfrastructureServices(builder.Configuration);
+            builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -30,10 +32,9 @@ namespace Auth.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseRouting();
             app.UseHttpsRedirection();
             app.UseSerilogRequestLogging();
-            app.UseAuthorization();
             app.MapControllers();
             app.Run();
         }

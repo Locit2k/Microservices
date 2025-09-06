@@ -1,9 +1,0 @@
-﻿Lệnh tạo Migration:
-
-PCM: 
-	+ Add-Migration InitDatabase -Project Auth.Infrastructure -StartupProject Auth.API -OutputDir Persistence/Migrations
-	+ Update-Database -Project Auth.Infrastructure -StartupProject Auth.API
-
-Terminal: 
-	+ dotnet ef migrations add InitDatabase --project Auth.Infrastructure --startup-project Auth.API --output-dir Persistence/Migrations
-	+ dotnet ef database update --project Auth.Infrastructure --startup-project Auth.API

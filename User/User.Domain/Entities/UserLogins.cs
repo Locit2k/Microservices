@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Auth.Domain.Entities
+namespace User.Domain.Entities
 {
     public class UserLogins : BaseEntity
     {
