@@ -43,5 +43,12 @@ namespace Auth.API.Controllers
         {
             return await _authService.Register(data);
         }
+
+
+        [HttpGet("google-login")]
+        public IActionResult GoogleLogin([FromQuery] string username)
+        {
+            return Ok("Google-login");
+        }
     }
 }
