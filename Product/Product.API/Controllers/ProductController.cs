@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Product.Application.DTOs;
+using Product.Application.Events;
 using Product.Application.Services;
 
 namespace Product.API.Controllers
@@ -12,9 +13,11 @@ namespace Product.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
-        public ProductController(IProductService productService)
+        private readonly IEventbus _eventbus;
+        public ProductController(IProductService productService, IEventbus eventbus)
         {
             _productService = productService;
+            _eventbus = eventbus;
         }
 
         [HttpGet]

@@ -1,8 +1,10 @@
-﻿using Core.Models;
+﻿using Core.Events;
+using Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Order.Application.DTOs;
+using Order.Application.Events;
 using Order.Application.Services;
 
 namespace Order.API.Controllers
@@ -12,9 +14,11 @@ namespace Order.API.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
-        public OrderController(IOrderService orderService)
+        private readonly IEventbus _eventbus;
+        public OrderController(IOrderService orderService, IEventbus eventbus)
         {
             _orderService = orderService;
+            _eventbus = eventbus;
         }
 
         [HttpGet]
@@ -41,6 +45,13 @@ namespace Order.API.Controllers
         public async Task<DataResponse<bool>> Delete(Guid recID)
         {
             return await _orderService.DeleteAsync(recID);
+        }
+
+        [HttpGet]
+        public DataResponse<string> TestRabbit()
+        {
+            _eventbus.Publish("OrderCreated", new OrderCreatedEvent() { OrderId = Guid.NewGuid().ToString(), ProductId = "123", Quantity = 1 });
+            return new DataResponse<string>(StatusCodes.Status200OK, "Order RabbitMq success!");
         }
     }
 }

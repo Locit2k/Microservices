@@ -1,5 +1,6 @@
 ﻿using Auth.Application.DTOs;
 using Auth.Application.Services;
+using Core.Commons.Interfaces;
 using Core.Models;
 using Core.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -20,10 +22,12 @@ namespace Auth.Infrastructure.Services
 {
     public class AuthService : IAuthService
     {
+        private readonly IServiceCaller _serviceCaller;
         private readonly ILogger<AuthService> _logger;
         private readonly JwtOptions _jwtOptions;
-        public AuthService(ILogger<AuthService> logger, IOptions<JwtOptions> jwtOptions)
+        public AuthService(IServiceCaller serviceCaller, ILogger<AuthService> logger, IOptions<JwtOptions> jwtOptions)
         {
+            _serviceCaller = serviceCaller;
             _logger = logger;
             _jwtOptions = jwtOptions.Value;
         }
@@ -32,7 +36,13 @@ namespace Auth.Infrastructure.Services
         {
             try
             {
-                return new DataResponse<object>(StatusCodes.Status200OK, "Đăng nhập thành công!", data = null);
+                var user = await _serviceCaller.CallApiAsync<Dictionary<string, object>>(HttpMethod.Post, ServiceNames.User, "GetByUserAndPassword", data);
+                if (user == null)
+                {
+                    return new DataResponse<object>(StatusCodes.Status400BadRequest, "Tên đăng nhập hoặc mật khẩu không đúng!");
+                }
+
+                return new DataResponse<object>(StatusCodes.Status200OK, "Đăng nhập thành công!", user);
             }
             catch (Exception ex)
             {
@@ -88,17 +98,5 @@ namespace Auth.Infrastructure.Services
             }
         }
 
-        public string HashPassword(object user, string password)
-        {
-            var _hasher = new PasswordHasher<object>();
-            return _hasher.HashPassword(user, password);
-        }
-
-        public bool VerifyPassword(object user, string hashedPassword, string inputPassword)
-        {
-            var _hasher = new PasswordHasher<object>();
-            var verificationResult = _hasher.VerifyHashedPassword(user, hashedPassword, inputPassword);
-            return verificationResult == PasswordVerificationResult.Success;
-        }
     }
 }

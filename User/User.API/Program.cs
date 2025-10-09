@@ -6,6 +6,7 @@ using Core.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Core.Commons.Interfaces;
 namespace User.API
 {
     public class Program

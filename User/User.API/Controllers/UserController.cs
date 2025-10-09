@@ -67,5 +67,14 @@ namespace User.API.Controllers
         {
             return Ok("Auth service checked");
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<DataResponse<UserDTO>> GetByUserAndPassword([FromBody] Dictionary<string, string> data)
+        {
+            var username = data.GetValueOrDefault("username");
+            var password = data.GetValueOrDefault("password");
+            return await _userService.GetByUserAndPassword(username, password);
+        }
     }
 }

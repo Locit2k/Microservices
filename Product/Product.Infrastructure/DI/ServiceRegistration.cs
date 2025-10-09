@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Product.Application.Events;
 using Product.Application.Services;
+using Product.Infrastructure.Events;
 using Product.Infrastructure.Persistence;
 using Product.Infrastructure.Repositories;
 using System;
@@ -23,6 +25,8 @@ namespace Product.Infrastructure.DI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryService, Services.CategoryService>();
             services.AddScoped<IProductService, Services.ProductService>();
+            services.AddScoped<IEventbus, RabbitMqPublisher>();
+            services.AddHostedService<RabbitMqConsumer>();
             return services;
         }
     }

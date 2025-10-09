@@ -10,6 +10,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Metadata" Version="9.0.8" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.8" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.8" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="9.0.8" />
 	</ItemGroup>
 

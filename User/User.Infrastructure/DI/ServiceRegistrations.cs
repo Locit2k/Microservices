@@ -1,4 +1,6 @@
-﻿using Core.Repositories;
+﻿using Core.Commons.Interfaces;
+using Core.Commons.Services;
+using Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +26,8 @@ namespace User.Infrastructure.DI
             });
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IUserService, User.Infrastructure.Services.UserService>();
+            services.AddScoped<IUserService, Services.UserService>();
+            services.AddScoped<ICommonService, CommonService>();
             return services;
         }
     }

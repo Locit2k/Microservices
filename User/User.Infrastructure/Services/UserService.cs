@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Azure;
+using Core.Commons.Interfaces;
 using Core.Models;
 using Core.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -18,11 +20,13 @@ namespace User.Infrastructure.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ICommonService _commonService;
         private readonly ILogger<UserService> _logger;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<UserService> logger)
+        public UserService(IUnitOfWork unitOfWork, ICommonService commonService, IMapper mapper, ILogger<UserService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _commonService = commonService;
             _logger = logger;
         }
 
@@ -111,6 +115,38 @@ namespace User.Infrastructure.Services
             {
                 _logger.LogError($"DeleteAsync error: {ex.Message}.");
                 return new DataResponse<bool>()
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError,
+                    Message = "An error occurred while deleting the user.",
+                    Error = new ErrorDetails()
+                    {
+                        Code = ErrorCodes.INTERNAL_SERVER_ERROR,
+                        Message = ex.Message
+                    }
+                };
+            }
+        }
+
+        public async Task<DataResponse<UserDTO>> GetByUserAndPassword(string username, string password)
+        {
+            try
+            {
+                var userDto = new UserDTO()
+                {
+                    Name = "Trần Tấn Lộc",
+                    Birthday = new DateTime(2000, 10, 5),
+                    Gender = "Nam",
+                    Email = "loctt.it2k@gmail.com",
+                    Phone = "0337369439",
+                    UserID = "TranTanLoc",
+                    Address = "15, Tân Thắng"
+                };
+                return new DataResponse<UserDTO>(StatusCodes.Status200OK, "Lấy thông tin thành công!", userDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"DeleteAsync error: {ex.Message}.");
+                return new DataResponse<UserDTO>()
                 {
                     StatusCode = StatusCodes.Status500InternalServerError,
                     Message = "An error occurred while deleting the user.",

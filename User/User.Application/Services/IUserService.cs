@@ -13,5 +13,6 @@ namespace User.Application.Services
         Task<DataResponse<UserDTO>> AddAsync(UserDTO data);
         Task<DataResponse<UserDTO>> UpdateAsync(UserDTO data);
         Task<DataResponse<bool>> DeleteAsync(string userID);
+        Task<DataResponse<UserDTO>> GetByUserAndPassword(string username, string password);
     }
 }

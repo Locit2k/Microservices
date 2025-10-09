@@ -14,7 +14,6 @@ namespace Auth.Application.Services
         Task<DataResponse<bool>> Logout(string username);
         Task<DataResponse<bool>> Register(RegisterDTO data);
         string GenerateToken(string userID, string roleID);
-        string HashPassword(object data, string password);
-        bool VerifyPassword(object user, string hashedPassword, string inputPassword);
+
     }
 }
